@@ -1,0 +1,26 @@
+{
+  "name": "node-ip.check",
+  "version": "1.0.0",
+  "description": "nodejs api ip check ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "nodejs",
+    "api",
+    "thk"
+  ],
+  "author": "Christian Mejia",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
