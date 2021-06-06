@@ -24,6 +24,7 @@ containerization:
     stage: containerization # must match the stage name declared above
     script:
         # Build the container image   
+        - echo $CI_PROJECT_NAME 
         - docker build -t $CI_PROJECT_NAME .
         # Push the container image to the registry
         #- docker push my-registry/my-application
@@ -34,7 +35,7 @@ containerization:
 register_image:
     stage: containerization
     variables:
-        SHA: $CI_COMMIT_SHA
+        SHA: $CI_COMMIT_SHORT_SHA
     script:
         - docker tag $CI_PROJECT_NAME $DOCKER_SERVER/$CI_PROJECT_NAME:$SHA
         - docker tag $CI_PROJECT_NAME $DOCKER_SERVER/$CI_PROJECT_NAME:latest
