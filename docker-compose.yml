@@ -1,0 +1,21 @@
+#Version del docker compose
+version: "3.3"
+
+services:
+    node-ip-check:
+        build: 
+            context: .
+        
+        container_name: node-ip-check
+        restart: always
+        ports:   
+            - 8012:8012
+        networks:
+            - testing
+        environment:
+            - APP_PORT=8012
+        working_dir: /app
+        command: bash -c "npm start"
+    
+networks:
+    testing: 

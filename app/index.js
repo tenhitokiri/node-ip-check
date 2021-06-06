@@ -1,5 +1,5 @@
 const app = require('./src/index');
-port = process.env.PORT
+port = process.env.APP_PORT
 
 //conexión asincrona para levantar el servidor
 async function main() {

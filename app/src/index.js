@@ -1,5 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
+const requestIp = require('request-ip');
+
 
 //activar modo desarrollo
 const modo = process.env.MODO;
@@ -9,17 +11,19 @@ if (!modo) {
 }
 
 const app = express();
+app.use(requestIp.mw())
 
 //Configuración de la aplicación
 
 //Middleware
-app.use(express.json());
 
 //RUTAS
 app.get('/', (req, res) => {
-	const message = `La api esta en /API. `;
+	const clientIp = req.clientIp
+	const message = `La api esta en /API. tu ip es ${clientIp}`;
 	res.json({
-		message
+		message,
+		clientIp
 	});
 });
 

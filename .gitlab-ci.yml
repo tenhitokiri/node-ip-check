@@ -1,0 +1,77 @@
+image: node:12
+
+stages:
+    - dependencies
+    - build
+    - containerization
+    - deploy
+    
+cache:
+    paths:
+        - node_modules/
+
+install_dependencies:
+    stage: dependencies
+    script:
+        - npm install
+    artifacts:
+        paths:
+            - node_modules/
+
+
+# DESARROLLO CAMBIA
+containerization:
+    stage: containerization # must match the stage name declared above
+    script:
+        # Build the container image   
+        - docker build -t $CI_PROJECT_NAME .
+        # Push the container image to the registry
+        #- docker push my-registry/my-application
+        # Cleanup by removing the local image
+        #- docker image rm my-registry/my-application
+# -------------
+
+register_image:
+    stage: containerization
+    variables:
+        SHA: $CI_COMMIT_SHA
+    script:
+        - docker tag $CI_PROJECT_NAME $DOCKER_SERVER/$CI_PROJECT_NAME:$SHA
+        - docker tag $CI_PROJECT_NAME $DOCKER_SERVER/$CI_PROJECT_NAME:latest
+        - docker push $DOCKER_SERVER/$CI_PROJECT_NAME:$SHA
+        - docker push $DOCKER_SERVER/$CI_PROJECT_NAME:latest
+    only:
+        - master
+
+deploy_to_desarrollo:
+    stage: deploy
+    variables:
+        APP_PORT: $APP_PORT
+    script: 
+        - echo $APP_PORT 
+        - docker-compose down 
+        - docker-compose up -d --build
+    only:
+        - desarrollo
+    tags: 
+        - desarrollo
+
+deploy_to_prod:
+    stage: deploy
+    variables:
+        MYSQL_SERVER: $PROD_MYSQL_SERVER 
+        MYSQL_USER: $DESA_MYSQL_USER
+        MYSQL_PW: $DESA_MYSQL_PASS
+        MYSQL_DB: $DESA_MYSQL_DB
+        MYSQL_PORT: $DESA_MYSQL_PORT
+        APP_PORT: $APP_PORT
+    script: 
+        - echo $PROD_MYSQL_SERVER 
+        - docker pull $DOCKER_SERVER/$CI_PROJECT_NAME:latest
+        - docker-compose down 
+        - docker-compose up -d --build
+    only:
+        - master
+    when: manual
+    tags: 
+        - master
