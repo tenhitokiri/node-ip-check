@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const requestIp = require('request-ip');
-
+const cors = require('cors');
 
 //activar modo desarrollo
 const modo = process.env.MODO;
@@ -12,6 +12,7 @@ if (!modo) {
 
 const app = express();
 app.use(requestIp.mw())
+app.use(cors())
 
 //Configuración de la aplicación
 
