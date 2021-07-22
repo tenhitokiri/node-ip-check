@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const requestIp = require('request-ip');
 const cors = require('cors');
+const fizzBuzz = require('./Functions')
 
 //activar modo desarrollo
 const modo = process.env.MODO;
@@ -10,13 +11,10 @@ if (!modo) {
 	console.log('modo dev');
 }
 
+//Middleware
 const app = express();
 app.use(requestIp.mw())
 app.use(cors())
-
-//Configuración de la aplicación
-
-//Middleware
 
 //RUTAS
 app.get('/', (req, res) => {
@@ -27,6 +25,21 @@ app.get('/', (req, res) => {
 		clientIp
 	});
 });
+
+//fizzBuzz
+app.get('/fizzbuzz/:n', (req, res) => {
+	const n = req.params.n;
+	const message = fizzBuzz(n);
+/* 	const resp = message.map(m => {
+		return {
+			message: m
+		}
+	}) */
+	res.json({
+		message,
+		n
+	});
+})
 
 //404 handle
 app.use((req, res, next) => {

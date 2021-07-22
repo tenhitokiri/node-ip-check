@@ -48,6 +48,7 @@ deploy_to_desarrollo:
     stage: deploy
     variables:
         APP_PORT: $APP_PORT
+        IMAGE: $CI_PROJECT_NAME:latest
     script: 
         - echo $APP_PORT 
         - docker-compose down 
@@ -66,11 +67,12 @@ deploy_to_prod:
         MYSQL_DB: $DESA_MYSQL_DB
         MYSQL_PORT: $DESA_MYSQL_PORT
         APP_PORT: $APP_PORT
+        IMAGE: $DOCKER_SERVER/$CI_PROJECT_NAME:latest
     script: 
         - echo $PROD_MYSQL_SERVER 
         - docker pull $DOCKER_SERVER/$CI_PROJECT_NAME:latest
         - docker-compose down 
-        - docker-compose up -d --build
+        - docker-compose up -d
     only:
         - master
     when: manual

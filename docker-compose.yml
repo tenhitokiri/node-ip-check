@@ -4,8 +4,7 @@ version: "3.3"
 services:
     node-ip-check:
         build: 
-            context: .
-        
+            image: $IMAGE
         container_name: node-ip-check
         restart: always
         ports:   
