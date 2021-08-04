@@ -23,13 +23,8 @@ install_dependencies:
 containerization:
     stage: containerization # must match the stage name declared above
     script:
-        # Build the container image   
         - echo $CI_PROJECT_NAME 
         - docker build -t $CI_PROJECT_NAME .
-        # Push the container image to the registry
-        #- docker push my-registry/my-application
-        # Cleanup by removing the local image
-        #- docker image rm my-registry/my-application
 # -------------
 
 register_image:
@@ -69,7 +64,7 @@ deploy_to_prod:
         APP_PORT: $APP_PORT
         IMAGE: $DOCKER_SERVER/$CI_PROJECT_NAME:latest
     script: 
-        - echo $PROD_MYSQL_SERVER 
+        - echo $IMAGE 
         - docker pull $DOCKER_SERVER/$CI_PROJECT_NAME:latest
         - docker-compose down 
         - docker-compose up -d

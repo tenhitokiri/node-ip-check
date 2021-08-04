@@ -30,11 +30,6 @@ app.get('/', (req, res) => {
 app.get('/fizzbuzz/:n', (req, res) => {
 	const n = req.params.n;
 	const message = fizzBuzz(n);
-/* 	const resp = message.map(m => {
-		return {
-			message: m
-		}
-	}) */
 	res.json({
 		message,
 		n
