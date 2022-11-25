@@ -12,6 +12,7 @@ services:
             - testing
         environment:
             - APP_PORT=8012
+            - REMOTE=http://localhost:3000/users
         working_dir: /app
         command: bash -c "npm start"
     
