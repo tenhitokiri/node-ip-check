@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeip-deployment
+  labels:
+    app: nodeip
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nodeip
+  template:
+    metadata:
+      labels:
+        app: nodeip
+    spec:
+      containers:
+      - name: nodeip
+        image: 067435599643.dkr.ecr.us-east-1.amazonaws.com/micro-test1:latest
+        ports:
+        - containerPort: 3100
+        env:
+        - name: APP_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: nodeip-config
+              key: app-port
+        - name: REMOTE
+          valueFrom:
+            configMapKeyRef:
+              name: nodeip-config
+              key: remote
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeip-service
+spec:
+  type: NodePort
+  selector:
+    app: nodeip
+  ports:
+    - protocol: TCP
+      port: 3100
+      targetPort: 3100
+      nodePort: 30101
